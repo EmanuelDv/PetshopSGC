@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Dueño</title>
+    <style>
+        /* Fuentes y colores generales */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fb; /* Fondo blanco claro */
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #D16E9E; /* Rosado */
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+
+        footer {
+            background-color: #D16E9E; /* Rosado */
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        /* Diseño del formulario */
+        main {
+            padding: 20px;
+            max-width: 600px; /* Reducido el ancho máximo */
+            margin: 20px auto; /* Alineado y ajustado con un margen */
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #8E44AD; /* Morado */
+            font-size: 1.6em; /* Ajustado el tamaño de la fuente */
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 8px 0 4px; /* Ajustado el margen */
+        }
+
+        input, textarea, select, button {
+            width: 100%;
+            padding: 10px; /* Reducido el padding */
+            margin: 8px 0; /* Ajustado el margen */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+
+        textarea {
+            resize: none;
+            height: 80px;
+        }
+
+        button {
+            background-color: #D16E9E; /* Rosado */
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #B15D8D; /* Rosado más oscuro */
+        }
+
+        /* Estilos del modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Estilos de diseño responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            main {
+                padding: 15px;
+                margin: 10px;
+            }
+
+            button {
+                font-size: 1em;
+                padding: 10px;
+            }
+
+            /* Ajustes de los inputs, select y textarea */
+            input, textarea, select {
+                padding: 0.8rem;
+            }
+
+            /* Modal */
+            .modal-content {
+                width: 90%;
+                margin: 20% auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            main {
+                padding: 10px;
+                margin: 5px;
+                max-width: 90%;
+            }
+
+            button {
+                padding: 0.8rem;
+            }
+
+            footer {
+                font-size: 0.8em;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Registrar Dueño</h1>
+    </header>
+
+    <main>
+        <form method="post">
+            <h2>Registrar Dueño</h2>
+            <label for="cedula">Cédula:</label>
+            <input type="text" id="cedula" name="cedula" required placeholder="Ingrese la cédula">
+
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required placeholder="Ingrese nombre">
+
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" required placeholder="Ingrese apellido">
+
+            <label for="correo">Correo Electrónico:</label>
+            <input type="email" id="correo" name="correo" required placeholder="Ingrese correo electrónico">
+
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono" required placeholder="Ingrese teléfono">
+
+            <label for="direccion">Dirección:</label>
+            <textarea id="direccion" name="direccion" required placeholder="Ingrese la dirección"></textarea>
+
+            <button type="submit">Registrar</button>
+        </form>
+    </main>
+
+    <footer>
+        &copy; 2025 Petshop
+    </footer>
+
+    {% if mensaje %}
+        <script>
+            window.onload = function() {
+                var modal = document.getElementById("myModal");
+                modal.style.display = "block";
+
+                var mensaje = "{{ mensaje }}";
+                document.getElementById("mensajeModal").innerText = mensaje;
+            }
+        </script>
+    {% endif %}
+
+    <!-- Modal -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>¡Registro Exitoso!</h2>
+        <p id="mensajeModal"></p>
+        <p>¡Gracias por registrar al dueño!</p>
+        <!-- Botón de redirección -->
+        <button onclick="window.location.href='/'">Volver al Inicio</button>
+    </div>
+</div>
+
+
+    <script>
+        var modal = document.getElementById("myModal");
+        var span = document.getElementsByClassName("close")[0];
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

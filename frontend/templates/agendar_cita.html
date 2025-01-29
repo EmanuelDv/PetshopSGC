@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Cita</title>
+    <style>
+       
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fb;
+            color: #333;
+        }
+
+        header {
+            background-color: #D16E9E; /* Rosado */
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem;
+        }
+
+        form {
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        form h2 {
+            margin-bottom: 1rem;
+            color: #8E44AD; /* Morado */
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 1rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #D16E9E; /* Rosado */
+            color: white;
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background-color: #B15D8D; /* Rosado más oscuro */
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #D16E9E; /* Rosado */
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            color: #8E44AD; /* Morado */
+        }
+
+        .modal-content p {
+            font-size: 18px;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            padding: 0;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Estilos Responsivos */
+        @media (max-width: 768px) {
+            form {
+                padding: 1rem;
+                margin: 1rem;
+            }
+
+            button {
+                padding: 0.6rem 1rem;
+            }
+
+            footer {
+                padding: 0.5rem;
+            }
+        }
+    
+        .error-message {
+            color: red;
+            font-size: 16px;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Agendar Cita</h1>
+    </header>
+    <main>
+        <form action="/agendar_cita" method="post" id="agendarCitaForm">
+            <h2>Agendar Cita de Baño</h2>
+
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" required>
+
+            <label for="hora">Hora:</label>
+            <input type="time" id="hora" name="hora" required>
+
+            <label for="servicio">Servicio:</label>
+            <select id="servicio" name="servicio" required>
+                <option value="" disabled selected>Elegir</option>
+                <option value="Combo básico">Combo básico</option>
+                <option value="Combo keratina">Combo keratina</option>
+                <option value="Combo gato">Combo gato</option>
+                <option value="Mantenimiento básico">Mantenimiento básico</option>
+                <option value="Combo alisado">Combo alisado</option>
+            </select>
+
+            <label for="dueño_id">Dueño:</label>
+            <select id="dueño_id" name="cedula_dueño" required>
+                <option value="" disabled selected>Elegir dueño</option>
+                {% for dueño in dueños %}
+                    <option value="{{ dueño[0] }}">{{ dueño[0] }} - {{ dueño[1] }} {{ dueño[2] }}</option>
+                {% endfor %}
+            </select>
+            
+            <label for="mascota_id">Mascota:</label>
+            <select id="mascota_id" name="mascota_id" required>
+                <option value="" disabled selected>Elegir mascota</option>
+                {% for mascota in mascotas %}
+                    <option value="{{ mascota[0] }}">{{ mascota[0] }} - {{ mascota[1] }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Confirmar Cita</button>
+
+            {% if error_message %}
+                <div class="error-message">{{ error_message }}</div>
+            {% endif %}
+        </form>
+
+        {% if cita_id %}
+        <div id="myModal" class="modal" style="display: block;">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>¡Cita Agendada Exitosamente!</h2>
+                <p>La cita ha sido agendada con el ID: <span id="citaId">{{ cita_id }}</span></p>
+                <p>¡Gracias por agendar la cita!</p>
+                <button onclick="window.location.href='/'">Volver al Inicio</button>
+            </div>
+        </div>
+        {% endif %}
+    </main>
+    <footer>
+        &copy; 2025 Petshop
+    </footer>
+
+    <script>
+        var modal = document.getElementById("myModal");
+        var span = document.getElementsByClassName("close")[0];
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

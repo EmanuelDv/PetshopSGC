@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Petshop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9; /* Fondo blanco */
+            color: #333;
+        }
+        header {
+            background-color: #D16E9E; /* Rosado */
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 2em;
+        }
+        
+        /* Diseño del Nav */
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #8E44AD; /* Morado */
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        nav a {
+            color: white;
+            padding: 12px 20px;
+            margin: 5px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        /* Hover effect para los enlaces */
+        nav a:hover {
+            background-color: #732D91; /* Morado más oscuro */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
+        }
+
+        /* Estilos del menú hamburguesa */
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+
+        /* Estilo de cada enlace del menu */
+        .menu a {
+            padding: 10px;
+            font-size: 1.1em;
+        }
+
+        /* Media Query para dispositivos pequeños */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+            }
+
+            .menu {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .menu a {
+                width: 100%;
+                padding: 15px;
+                text-align: left;
+            }
+
+            /* Botón de hamburguesa */
+            .menu a.toggle {
+                display: block;
+                background-color: #8E44AD;
+                padding: 10px;
+                border-radius: 8px;
+                cursor: pointer;
+                text-align: center;
+                font-size: 1.2em;
+            }
+
+            /* Mostrar menú cuando se activa */
+            nav.active .menu {
+                display: flex;
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #D16E9E; /* Rosado */
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Petshop Citas</h1>
+    </header>
+
+    <!-- Barra de navegación -->
+    <nav>
+        <!-- Botón de menú hamburguesa en dispositivos pequeños -->
+        <a href="javascript:void(0);" class="toggle">&#9776; Menú</a>
+
+        <div class="menu">
+            <a href="/registro_dueño">Registrar Dueño</a>
+            <a href="/registro_mascota">Registrar Mascota</a>
+            <a href="/agendar_cita">Agendar Cita</a>
+            <a href="/consulta_cita">Consultar Cita</a>
+        </div>
+    </nav>
+
+    <footer>
+        &copy; Petshop 2025
+    </footer>
+
+    <script>
+        // Función para activar el menú en dispositivos pequeños
+        const toggleButton = document.querySelector('.toggle');
+        const navMenu = document.querySelector('nav');
+
+        toggleButton.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Consulta de Cita</title>
+        <style>
+/* Reset general y configuración base */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F9F9F9; /* Blanco suave */
+    color: #333;
+    box-sizing: border-box; /* Asegura que padding y border no afecten el tamaño del elemento */
+}
+
+*, *::before, *::after {
+    box-sizing: inherit; /* Aplica box-sizing: border-box a todos los elementos */
+}
+
+header {
+    background-color: #FF66B2; /* Rosado */
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2rem;
+    padding: 0 1rem;
+}
+
+form {
+    background-color: white;
+    border: 1px solid #D3D3D3; /* Gris claro */
+    border-radius: 8px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 500px; /* Establece un máximo de 500px en pantallas grandes */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 auto; /* Centrado del formulario */
+}
+
+form h2 {
+    margin-bottom: 1.5rem;
+    color: #9B59B6; /* Morado */
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 1rem;
+    color: #555;
+}
+
+input, button {
+    width: 100%; /* Hace que los inputs y botones ocupen el 100% del ancho disponible */
+    padding: 0.8rem;
+    margin-top: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #D3D3D3; /* Gris claro */
+    font-size: 1rem;
+}
+
+input[type="number"] {
+    padding-left: 10px;
+}
+
+button {
+    background-color: #FF66B2; /* Rosado */
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 1rem;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #FF3385; /* Rosado más oscuro */
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #FF66B2; /* Rosado */
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Estilos para los resultados */
+.resultados {
+    background-color: #ffffff;
+    border: 2px solid #9B59B6; /* Morado */
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    transition: transform 0.3s ease;
+}
+
+.resultados:hover {
+    transform: scale(1.02);
+}
+
+.resultados h3 {
+    color: #9B59B6; /* Morado */
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.resultados p {
+    font-size: 1rem;
+    color: #555;
+    margin: 0.5rem 0;
+    line-height: 1.6;
+}
+
+.resultados .section {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.resultados .section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* Modal */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+    color: #FF66B2; /* Rosado */
+}
+
+.modal-content p {
+    font-size: 18px;
+}
+
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    padding: 0;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    header {
+        padding: 1rem;
+    }
+
+    main {
+        margin: 1rem;
+    }
+
+    form {
+        padding: 1.5rem;
+        width: 100%;
+        max-width: 100%; /* Se asegura que el formulario ocupe el 100% en pantallas pequeñas */
+    }
+
+    .resultados {
+        padding: 1rem;
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    form {
+        padding: 1rem;
+    }
+
+    button {
+        font-size: 1.1rem;
+        padding: 0.8rem;
+    }
+}
+
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Consulta de Cita</h1>
+        </header>
+        <main>
+            <form action="/consulta_cita" method="post">
+                <h2>Consultar Cita</h2>
+
+                <label for="cita_id">ID de la Cita:</label>
+                <input type="number" id="cita_id" name="cita_id" required min="1">
+                <button type="submit">Consultar</button>
+            </form>
+
+            {% if dueño and mascota and cita %}
+            <div class="resultados">
+                <div class="section">
+                    <h3>Dueño:</h3>
+                    <p><strong>Nombre:</strong> {{ dueño['nombre'] }} {{ dueño['apellido'] }}</p>
+                    <p><strong>Correo:</strong> {{ dueño['correo'] }}</p>
+                    <p><strong>Teléfono:</strong> {{ dueño['telefono'] }}</p>
+                </div>
+
+                <div class="section">
+                    <h3>Mascota:</h3>
+                    <p><strong>Nombre:</strong> {{ mascota['nombre'] }}</p>
+                    <p><strong>Tipo:</strong> {{ mascota['especie'] }}</p>
+                    <p><strong>Raza:</strong> {{ mascota['raza'] }}</p>
+                </div>
+
+                <div class="section">
+                    <h3>Cita:</h3>
+                    <p><strong>Servicio:</strong> {{ cita[8] }}</p>
+                    <p><strong>Fecha:</strong> {{ cita[9] }}</p>
+                    <p><strong>Hora:</strong> {{ cita[10] }}</p>
+                </div>
+                <button onclick="window.location.href='/'">Volver al inicio</button>
+            </div>
+            {% elif error_message %}
+            <div id="errorModal" class="modal" style="display: block;">
+                <div class="modal-content">
+                    <span class="close" aria-label="Cerrar modal">&times;</span>
+                    <h2>¡Error!</h2>
+                    <p>{{ error_message }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </main>
+        <footer>
+            &copy; 2025 Petshop
+        </footer>
+
+        <script>
+        var modal = document.getElementById("errorModal");
+        var span = document.getElementsByClassName("close")[0];
+
+        if (modal) {
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        }
+    </script>
+    </body>
+</html>
